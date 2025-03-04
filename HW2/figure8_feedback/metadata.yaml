@@ -1,0 +1,29 @@
+rosbag2_bagfile_information:
+  compression_format: ''
+  compression_mode: ''
+  custom_data: {}
+  duration:
+    nanoseconds: 38951037725
+  files:
+  - duration:
+      nanoseconds: 38951037725
+    message_count: 773
+    path: figure8_feedback.db3
+    starting_time:
+      nanoseconds_since_epoch: 1676557554229877392
+  message_count: 773
+  relative_file_paths:
+  - figure8_feedback.db3
+  ros_distro: rosbags
+  starting_time:
+    nanoseconds_since_epoch: 1676557554229877392
+  storage_identifier: sqlite3
+  topics_with_message_count:
+  - message_count: 773
+    topic_metadata:
+      name: /feedback
+      offered_qos_profiles: ''
+      serialization_format: cdr
+      type: jackal_msgs/msg/Feedback
+      type_description_hash: RIHS01_0ed30823663db386cd9e32c6640cd25eb173b2a3d8812de30476a58951e40ac6
+  version: 8
