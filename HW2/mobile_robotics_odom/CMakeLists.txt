@@ -23,7 +23,15 @@ target_include_directories(odometry PUBLIC
   $<INSTALL_INTERFACE:include>)
 target_compile_features(odometry PUBLIC c_std_99 cxx_std_17)  # Require C99 and C++17
 
-install(TARGETS odometry
+# new executable
+add_executable(pose src/pose.cpp)
+ament_target_dependencies(pose rclcpp jackal_msgs mobile_robotics_interfaces)
+target_include_directories(pose PUBLIC
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+  $<INSTALL_INTERFACE:include>)
+target_compile_features(pose PUBLIC c_std_99 cxx_std_17)  # Require C99 and C++17
+
+install(TARGETS odometry  pose
   DESTINATION lib/${PROJECT_NAME})
 
 if(BUILD_TESTING)
