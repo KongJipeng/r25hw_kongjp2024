@@ -36,15 +36,11 @@ class Pose : public rclcpp::Node
     {
       auto pose_message = mobile_robotics_interfaces::msg::Pose2DStamped();
 
-      // 更新全局坐标 - 考虑机器人的方向
-      // 首先将增量从局部坐标系转换到全局坐标系
-      double delta_x_global = odom_msg.x * cos(global_theta_) - odom_msg.y * sin(global_theta_);
-      double delta_y_global = odom_msg.x * sin(global_theta_) + odom_msg.y * cos(global_theta_);
       
       // 更新全局坐标
-      global_x_ += delta_x_global;
-      global_y_ += delta_y_global;
-      global_theta_ += odom_msg.theta;
+      global_x_ = odom_msg.x;
+      global_y_ = odom_msg.y;
+      global_theta_ = odom_msg.theta;
       
       // 归一化角度到 [-π, π]
       while (global_theta_ > M_PI) global_theta_ -= 2.0 * M_PI;

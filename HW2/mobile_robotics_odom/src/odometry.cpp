@@ -92,18 +92,12 @@ class Odometry : public rclcpp::Node
       } else {
         // 如果机器人做曲线运动
         double r = linear_dist / angular_dist;
-        delta_x = r * (sin(theta_ + angular_dist) - sin(theta_));
-        delta_y = r * (cos(theta_) - cos(theta_ + angular_dist));
+        delta_y = r * (sin(theta_ + angular_dist) - sin(theta_));
+        delta_x = r * (cos(theta_) - cos(theta_ + angular_dist));
       }
       
       // 更新姿态
       double delta_theta = angular_dist;
-      
-      // 创建并填充里程计消息
-      odom_message.header = jackal_feedback_msg.header;
-      odom_message.x = delta_x;
-      odom_message.y = delta_y;
-      odom_message.theta = delta_theta;
 
       // 更新全局位置和方向（用于下一次计算）
       x_ += delta_x;
@@ -114,6 +108,12 @@ class Odometry : public rclcpp::Node
       while (theta_ > M_PI) theta_ -= 2 * M_PI;
       while (theta_ < -M_PI) theta_ += 2 * M_PI;
       
+      // 创建并填充里程计消息
+      odom_message.header = jackal_feedback_msg.header;
+      odom_message.x = x_;
+      odom_message.y = y_;
+      odom_message.theta = theta_;
+
       // 更新上一次的轮子位置和时间
       prev_left_wheel_pos_ = left_wheel_pos;
       prev_right_wheel_pos_ = right_wheel_pos;
