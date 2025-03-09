@@ -36,7 +36,7 @@ class Odometry : public rclcpp::Node
     // You may declare global variables here...
     double wheel_radius = 0.098;  // radius of the wheel, in meters
     double wheel_base = 0.37559;  // distance between the wheels and the center, in meters
-    double wheel_separation_multiplier = 1.5; // multiplier for the wheel separation
+    double wheel_separation_multiplier = 1.617; // multiplier for the wheel separation
     double effective_wheel_base; // effective wheel base, in meters
 
     // State variables
@@ -87,13 +87,13 @@ class Odometry : public rclcpp::Node
       double delta_x, delta_y;
       if (fabs(angular_dist) < 1e-6) {
         // 如果机器人几乎是直线运动
-        delta_x = linear_dist * cos(theta_);
-        delta_y = linear_dist * sin(theta_);
+        delta_y = linear_dist * cos(theta_);
+        delta_x = linear_dist * sin(theta_);
       } else {
         // 如果机器人做曲线运动
         double r = linear_dist / angular_dist;
-        delta_y = r * (sin(theta_ + angular_dist) - sin(theta_));
-        delta_x = r * (cos(theta_) - cos(theta_ + angular_dist));
+        delta_x = r * (sin(theta_ + angular_dist) - sin(theta_));
+        delta_y = r * (cos(theta_) - cos(theta_ + angular_dist));
       }
       
       // 更新姿态
