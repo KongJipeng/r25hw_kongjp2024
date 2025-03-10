@@ -79,7 +79,7 @@ class Odometry : public rclcpp::Node
       double left_dist = delta_left * wheel_radius;
       double right_dist = delta_right * wheel_radius;
       
-      // 计算机器人的线性和角速度
+      // 计算机器人的线性和角变化
       double linear_dist = (right_dist + left_dist) / 2.0;
       double angular_dist = (right_dist - left_dist) / effective_wheel_base;
 

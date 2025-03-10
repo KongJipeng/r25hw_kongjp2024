@@ -1,0 +1,28 @@
+rosbag2_bagfile_information:
+  version: 7
+  storage_identifier: mcap
+  duration:
+    nanoseconds: 38651494789
+  starting_time:
+    nanoseconds_since_epoch: 1676557554530078734
+  message_count: 767
+  topics_with_message_count:
+    - topic_metadata:
+        name: /pose
+        type: mobile_robotics_interfaces/msg/Pose2DStamped
+        serialization_format: cdr
+        offered_qos_profiles: "- history: 3\n  depth: 0\n  reliability: 1\n  durability: 2\n  deadline:\n    sec: 9223372036\n    nsec: 854775807\n  lifespan:\n    sec: 9223372036\n    nsec: 854775807\n  liveliness: 1\n  liveliness_lease_duration:\n    sec: 9223372036\n    nsec: 854775807\n  avoid_ros_namespace_conventions: false"
+        type_description_hash: RIHS01_fda7cb146a5d0f8f3e3c966ed4880ee9c4dffee983dd10052ea894f3acb566ab
+      message_count: 767
+  compression_format: ""
+  compression_mode: ""
+  relative_file_paths:
+    - pose_0.mcap
+  files:
+    - path: pose_0.mcap
+      starting_time:
+        nanoseconds_since_epoch: 1676557554530078734
+      duration:
+        nanoseconds: 38651494789
+      message_count: 767
+  custom_data: ~

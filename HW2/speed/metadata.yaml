@@ -1,0 +1,28 @@
+rosbag2_bagfile_information:
+  version: 7
+  storage_identifier: mcap
+  duration:
+    nanoseconds: 38651317693
+  starting_time:
+    nanoseconds_since_epoch: 1676557554530090622
+  message_count: 767
+  topics_with_message_count:
+    - topic_metadata:
+        name: /speed
+        type: mobile_robotics_interfaces/msg/SpeedStamped
+        serialization_format: cdr
+        offered_qos_profiles: "- history: 3\n  depth: 0\n  reliability: 1\n  durability: 2\n  deadline:\n    sec: 9223372036\n    nsec: 854775807\n  lifespan:\n    sec: 9223372036\n    nsec: 854775807\n  liveliness: 1\n  liveliness_lease_duration:\n    sec: 9223372036\n    nsec: 854775807\n  avoid_ros_namespace_conventions: false"
+        type_description_hash: RIHS01_375ec459878e68b49c3e4f0747dbba075b07b2cd41903d3e91a665ccdef5a9a7
+      message_count: 767
+  compression_format: ""
+  compression_mode: ""
+  relative_file_paths:
+    - speed_0.mcap
+  files:
+    - path: speed_0.mcap
+      starting_time:
+        nanoseconds_since_epoch: 1676557554530090622
+      duration:
+        nanoseconds: 38651317693
+      message_count: 767
+  custom_data: ~
