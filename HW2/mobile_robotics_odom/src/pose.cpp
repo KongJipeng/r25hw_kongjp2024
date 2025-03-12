@@ -43,19 +43,19 @@ class Pose : public rclcpp::Node
       auto pose_message = mobile_robotics_interfaces::msg::Pose2DStamped();
       auto speed_message = mobile_robotics_interfaces::msg::SpeedStamped();
 
-      // 获取当前时间
+      // Get the current time
       rclcpp::Time current_time = this->get_clock()->now();
 
-      // 更新全局坐标
+      // Update the global position and orientation
       global_x_ = odom_msg.x;
       global_y_ = odom_msg.y;
       global_theta_ = odom_msg.theta;
       
-      // 归一化角度到 [-π, π]
+      // Normalize the angle
       while (global_theta_ > M_PI) global_theta_ -= 2.0 * M_PI;
       while (global_theta_ < -M_PI) global_theta_ += 2.0 * M_PI;
       
-      // 将全局坐标填充到消息中
+      // Fill in the pose message
       pose_message.header = odom_msg.header;
       pose_message.header.frame_id = "odom";
       pose_message.x = global_x_;
@@ -65,21 +65,21 @@ class Pose : public rclcpp::Node
       pose_publisher_->publish(pose_message);
       RCLCPP_INFO(this->get_logger(), "Odometry: x=%f, y=%f, theta=%f", pose_message.x, pose_message.y, pose_message.theta);
 
-      // 计算速度
+      // Calculate the speed
       if (prev_time_.nanoseconds() != 0) {
         double dt = (current_time - prev_time_).seconds();
         double dx = odom_msg.x - prev_x_;
         double dy = odom_msg.y - prev_y_;
         double linear_speed = sqrt(dx * dx + dy * dy) / dt;
 
-        // 填充速度消息
+        // Fill in the speed message
         speed_message.header = odom_msg.header;
         speed_message.speed = linear_speed;
 
         speed_publisher_->publish(speed_message);
         RCLCPP_INFO(this->get_logger(), "Speed: linear=%f", speed_message.speed);
       }
-      // 更新上一次的时间和位置
+      // Update the previous values
       prev_time_ = current_time;
       prev_x_ = global_x_;
       prev_y_ = global_y_;

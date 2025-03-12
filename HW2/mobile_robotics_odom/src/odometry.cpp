@@ -71,50 +71,49 @@ class Odometry : public rclcpp::Node
         first_msg_ = false;
         return;
       }
-      // 计算轮子转动的角度变化
+      // Calculate the change in wheel position
       double delta_left = left_wheel_pos - prev_left_wheel_pos_;
       double delta_right = right_wheel_pos - prev_right_wheel_pos_;
       
-      // 计算左右轮的线性位移
+      // Calculate the distance traveled by each wheel
       double left_dist = delta_left * wheel_radius;
       double right_dist = delta_right * wheel_radius;
       
-      // 计算机器人的线性和角变化
+      // Calculate the linear and angular distance traveled by the robot
       double linear_dist = (right_dist + left_dist) / 2.0;
       double angular_dist = (right_dist - left_dist) / effective_wheel_base;
 
-      // 更新机器人在全局坐标系下的位置和方向
+      // Calculate the change in x and y
       double delta_x, delta_y;
       if (fabs(angular_dist) < 1e-6) {
-        // 如果机器人几乎是直线运动
+        // If the robot is moving straight
         delta_y = linear_dist * cos(theta_);
         delta_x = linear_dist * sin(theta_);
       } else {
-        // 如果机器人做曲线运动
+        // If the robot is turning
         double r = linear_dist / angular_dist;
         delta_x = r * (sin(theta_ + angular_dist) - sin(theta_));
         delta_y = r * (cos(theta_) - cos(theta_ + angular_dist));
       }
       
-      // 更新姿态
       double delta_theta = angular_dist;
 
-      // 更新全局位置和方向（用于下一次计算）
+      // Update the position of the robot
       x_ += delta_x;
       y_ += delta_y;
       theta_ += delta_theta;
       
-      // 归一化角度到[-π, π]
+      // Normalize the angle
       while (theta_ > M_PI) theta_ -= 2 * M_PI;
       while (theta_ < -M_PI) theta_ += 2 * M_PI;
       
-      // 创建并填充里程计消息
+      // Fill in the odometry message
       odom_message.header = jackal_feedback_msg.header;
       odom_message.x = x_;
       odom_message.y = y_;
       odom_message.theta = theta_;
 
-      // 更新上一次的轮子位置和时间
+      // Update the previous wheel positions
       prev_left_wheel_pos_ = left_wheel_pos;
       prev_right_wheel_pos_ = right_wheel_pos;
 
