@@ -1,0 +1,36 @@
+rosbag2_bagfile_information:
+  compression_format: ''
+  compression_mode: ''
+  custom_data: {}
+  duration:
+    nanoseconds: 39991666999
+  files:
+  - duration:
+      nanoseconds: 39991666999
+    message_count: 9600
+    path: figure8_tracking.db3
+    starting_time:
+      nanoseconds_since_epoch: 1675937040000000000
+  message_count: 9600
+  relative_file_paths:
+  - figure8_tracking.db3
+  ros_distro: rosbags
+  starting_time:
+    nanoseconds_since_epoch: 1675937040000000000
+  storage_identifier: sqlite3
+  topics_with_message_count:
+  - message_count: 4797
+    topic_metadata:
+      name: motive_tracking/tf
+      offered_qos_profiles: ''
+      serialization_format: cdr
+      type: geometry_msgs/msg/TransformStamped
+      type_description_hash: RIHS01_0a241f87d04668d94099cbb5ba11691d5ad32c2f29682e4eb5653424bd275206
+  - message_count: 4803
+    topic_metadata:
+      name: motive_tracking/pose
+      offered_qos_profiles: ''
+      serialization_format: cdr
+      type: geometry_msgs/msg/PoseStamped
+      type_description_hash: RIHS01_10f3786d7d40fd2b54367835614bff85d4ad3b5dab62bf8bca0cc232d73b4cd8
+  version: 8

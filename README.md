@@ -25,3 +25,16 @@ How to run:
  - $ ros2 bag play figure8_feedback --clock-topics-all
 
 The key to success is to finetune wheel_separation_multiplier = 1.617 to make the circles more like 8.
+
+
+## HW3 doing
+take one day...
+
+### task1:
+Dependencies:
+- pip install evo
+- pip install numpy=1.23.5  //scipy conflict
+- sudo apt remove python3-matplotlib    //multi matplotlib conflict
+
+"evo_traj bag topic --save_as tum" to convert bag to tum.
+"evo_traj tum tum1 tum2 --align --plot_mode xz" to compare on one plane 
