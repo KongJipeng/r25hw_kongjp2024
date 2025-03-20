@@ -2,6 +2,9 @@
     <!-- 设置 use_sim_time 参数 -->
     <arg name="use_sim_time" default="true" />
 
+    <!-- 启动 rviz2 -->
+    <node pkg="rviz2" exec="rviz2" name="rviz2" output="screen" args="-d $(find-pkg-share task2)/qos_best_effort.rviz" />
+
     <!-- 启动 slam_gmapping 节点 -->
     <node pkg="slam_gmapping" exec="slam_gmapping" output="screen">
         <param name="use_sim_time" value="$(var use_sim_time)" />
