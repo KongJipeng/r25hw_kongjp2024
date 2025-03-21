@@ -12,6 +12,9 @@ find_package(builtin_interfaces REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(jackal_msgs REQUIRED)
 find_package(mobile_robotics_interfaces REQUIRED)
+
+find_package(tf2 REQUIRED)
+find_package(tf2_geometry_msgs REQUIRED)
 # uncomment the following section in order to fill in
 # further dependencies manually.
 # find_package(<dependency> REQUIRED)
@@ -25,7 +28,7 @@ target_compile_features(odometry PUBLIC c_std_99 cxx_std_17)  # Require C99 and 
 
 # new executable
 add_executable(pose src/pose.cpp)
-ament_target_dependencies(pose rclcpp jackal_msgs mobile_robotics_interfaces)
+ament_target_dependencies(pose rclcpp jackal_msgs mobile_robotics_interfaces tf2 tf2_geometry_msgs)
 target_include_directories(pose PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
   $<INSTALL_INTERFACE:include>)

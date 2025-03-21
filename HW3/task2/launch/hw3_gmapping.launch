@@ -3,7 +3,17 @@
     <arg name="use_sim_time" default="true" />
 
     <!-- 启动 rviz2 -->
-    <node pkg="rviz2" exec="rviz2" name="rviz2" output="screen" args="-d $(find-pkg-share task2)/qos_best_effort.rviz" />
+    <node pkg="rviz2" exec="rviz2" name="rviz2" output="screen" args="-d /home/kongjp-wsl/r25hw_kongjp2024/HW3/task2/qos_best_effort.rviz" />
+
+
+    <!-- 启动 robot_state_publisher hw1 节点 -->
+    <node pkg="mobile_robotics_odom" exec="odometry" output="screen">
+        <param name="use_sim_time" value="$(var use_sim_time)" />
+    </node>
+
+    <node pkg="mobile_robotics_odom" exec="pose" output="screen">
+        <param name="use_sim_time" value="$(var use_sim_time)" />
+    </node>
 
     <!-- 启动 slam_gmapping 节点 -->
     <node pkg="slam_gmapping" exec="slam_gmapping" output="screen">
@@ -17,12 +27,12 @@
     </include>
 
     <!-- 启动 rosbag2 play 节点 -->
-    <arg name="bag_file" default="/home/kongjp-wsl/r25hw_kongjp2024/HW3/figure8_sensor" description="Path to the rosbag2 figure8_sensor"/>
-    <executable cmd="ros2 bag play $(var bag_file) --clock-topics-all" output="screen"/>
+    <!-- <arg name="bag_file" default="/home/kongjp-wsl/r25hw_kongjp2024/HW3/figure8_sensor" description="Path to the rosbag2 figure8_sensor"/>
+    <executable cmd="ros2 bag play $(var bag_file) clock-topics-all" output="screen"/> -->
 
     <!-- 启动 rosbag2 play 节点 -->
     <!-- <arg name="bag_file" default="/home/kongjp-wsl/r25hw_kongjp2024/HW3/figure8_tracking" description="Path to the rosbag2 figure8_tracking"/>
-    <executable cmd="ros2 bag play $(var bag_file) clock-topics-all" output="screen"/> -->
+    <executable cmd="ros2 bag play $(var bag_file) " output="screen"/> -->
 
 
 </launch>
