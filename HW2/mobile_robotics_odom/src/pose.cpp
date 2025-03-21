@@ -70,7 +70,7 @@ class Pose : public rclcpp::Node
       pose_message.theta = global_theta_;
       
       pose_publisher_->publish(pose_message);
-      RCLCPP_INFO(this->get_logger(), "Odometry: x=%f, y=%f, theta=%f", pose_message.x, pose_message.y, pose_message.theta);
+      // RCLCPP_INFO(this->get_logger(), "Odometry: x=%f, y=%f, theta=%f", pose_message.x, pose_message.y, pose_message.theta);
 
       // Calculate the speed
       if (prev_time_.nanoseconds() != 0) {
@@ -84,7 +84,7 @@ class Pose : public rclcpp::Node
         speed_message.speed = linear_speed;
 
         speed_publisher_->publish(speed_message);
-        RCLCPP_INFO(this->get_logger(), "Speed: linear=%f", speed_message.speed);
+        // RCLCPP_INFO(this->get_logger(), "Speed: linear=%f", speed_message.speed);
       }
       // Update the previous values
       prev_time_ = current_time;

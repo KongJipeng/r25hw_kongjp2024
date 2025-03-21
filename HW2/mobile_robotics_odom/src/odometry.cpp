@@ -48,8 +48,8 @@ class Odometry : public rclcpp::Node
     void motor_callback(const jackal_msgs::msg::Feedback & jackal_feedback_msg) 
     {
       // you may comment the next line...
-      RCLCPP_INFO(this->get_logger(), "The wheel 0 is at angle: %s rad", std::to_string(jackal_feedback_msg.drivers[0].measured_travel).c_str());
-      RCLCPP_INFO(this->get_logger(), "The wheel 1 is at angle: %s rad", std::to_string(jackal_feedback_msg.drivers[1].measured_travel).c_str());
+      // RCLCPP_INFO(this->get_logger(), "The wheel 0 is at angle: %s rad", std::to_string(jackal_feedback_msg.drivers[0].measured_travel).c_str());
+      // RCLCPP_INFO(this->get_logger(), "The wheel 1 is at angle: %s rad", std::to_string(jackal_feedback_msg.drivers[1].measured_travel).c_str());
       auto odom_message = mobile_robotics_interfaces::msg::Transform2DStamped();
 
       // Step 5: Calculate Odometry
@@ -118,7 +118,7 @@ class Odometry : public rclcpp::Node
       prev_right_wheel_pos_ = right_wheel_pos;
 
       odom_publisher_->publish(odom_message);
-      RCLCPP_INFO(this->get_logger(), "Odometry: dx=%f, dy=%f, dtheta=%f", delta_x, delta_y, delta_theta);
+      // RCLCPP_INFO(this->get_logger(), "Odometry: dx=%f, dy=%f, dtheta=%f", delta_x, delta_y, delta_theta);
     }
 };
 
