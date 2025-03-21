@@ -1,0 +1,6 @@
+[submodule "HW3/pointcloud_to_laserscan"]
+	path = HW3/pointcloud_to_laserscan
+	url = https://github.com/KongJipeng/pointcloud_to_laserscan.git
+[submodule "HW3/slam_gmapping"]
+	path = HW3/slam_gmapping
+	url = https://github.com/KongJipeng/slam_gmapping.git
