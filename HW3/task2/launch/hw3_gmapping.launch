@@ -1,10 +1,16 @@
 <launch>
     <!-- 设置 use_sim_time 参数 -->
     <arg name="use_sim_time" default="true" />
+    
+    <!-- 使用包路径而非绝对路径 -->
+    <arg name="rviz_config" default="$(env HOME)/r25hw_kongjp2024/HW3/task2/qos_best_effort.rviz" description="Path to the RViz configuration file"/>
+    
+    <!-- 设置数据包路径为可配置参数 -->
+    <arg name="figure8_sensor_bag" default="$(env HOME)/r25hw_kongjp2024/HW3/figure8_sensor" description="Path to the figure8_sensor rosbag"/>
+    <arg name="figure8_tracking_bag" default="$(env HOME)/r25hw_kongjp2024/HW3/figure8_tracking" description="Path to the figure8_tracking rosbag"/>
 
     <!-- 启动 rviz2 -->
-    <node pkg="rviz2" exec="rviz2" name="rviz2" output="screen" args="-d /home/kongjp-wsl/r25hw_kongjp2024/HW3/task2/qos_best_effort.rviz" />
-
+    <node pkg="rviz2" exec="rviz2" name="rviz2" output="screen" args="-d $(var rviz_config)" />
 
     <!-- 启动 robot_state_publisher hw1 节点 -->
     <node pkg="mobile_robotics_odom" exec="odometry" output="screen">
@@ -23,16 +29,11 @@
     <!-- 启动 pointcloud_to_laserscan launch -->
     <include file="$(find-pkg-share pointcloud_to_laserscan)/launch/sample_pointcloud_to_laserscan_launch.py">
         <arg name="use_sim_time" value="$(var use_sim_time)" />
-        
     </include>
 
-    <!-- 启动 rosbag2 play 节点 -->
-    <!-- <arg name="bag_file" default="/home/kongjp-wsl/r25hw_kongjp2024/HW3/figure8_sensor" description="Path to the rosbag2 figure8_sensor"/>
-    <executable cmd="ros2 bag play $(var bag_file) clock-topics-all" output="screen"/> -->
-
-    <!-- 启动 rosbag2 play 节点 -->
-    <!-- <arg name="bag_file" default="/home/kongjp-wsl/r25hw_kongjp2024/HW3/figure8_tracking" description="Path to the rosbag2 figure8_tracking"/>
-    <executable cmd="ros2 bag play $(var bag_file) " output="screen"/> -->
-
+    <!-- 启动 rosbag2 play 节点 (已注释) -->
+    <!-- <arg name="bag_to_play" default="sensor" description="Which bag to play: 'sensor' or 'tracking'"/>
+    <executable cmd="ros2 bag play $(var bag_to_play) clock-topics-all" output="screen" if="$(eval 'sensor' == bag_to_play)"/> 
+    <executable cmd="ros2 bag play $(var figure8_tracking_bag)" output="screen" if="$(eval 'tracking' == bag_to_play)"/> -->
 
 </launch>
