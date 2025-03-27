@@ -32,7 +32,7 @@ def generate_launch_description():
     
     declare_rate_cmd = DeclareLaunchArgument(
         'rate',
-        default_value='0.1',
+        default_value='0.5',
         description='Rate at which to play bag file')
     
     declare_rviz_config_cmd = DeclareLaunchArgument(
@@ -71,7 +71,7 @@ def generate_launch_description():
     
     # 播放bag文件
     bag_play_cmd = ExecuteProcess(
-        cmd=['ros2', 'bag', 'play', bag_file, '--clock', '--rate', rate],
+        cmd=['ros2', 'bag', 'play', bag_file, '--clock-topics-all', '--rate', rate],
         output='screen'
     )
     
