@@ -191,9 +191,15 @@ private:
     
     // 从变换矩阵中提取位置和方向
     Eigen::Vector3f translation = transformation_matrix.block<3, 1>(0, 3);
-    Eigen::Matrix3f rotation = transformation_matrix.block<3, 3>(0, 0);
     
-    // 将旋转矩阵转换为四元数
+    // 从变换矩阵中提取旋转矩阵
+    Eigen::Matrix3f rotation = transformation_matrix.block<3, 3>(0, 0);
+
+    // 添加绕Z轴180度修正
+    Eigen::AngleAxisf correction(M_PI, Eigen::Vector3f::UnitZ());
+    rotation = rotation * correction.toRotationMatrix();
+
+    // 将修正后的旋转矩阵转换为四元数
     Eigen::Quaternionf quat(rotation);
     
     // 创建位姿消息
