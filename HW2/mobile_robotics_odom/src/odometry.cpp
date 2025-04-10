@@ -15,6 +15,12 @@
 #include "jackal_msgs/msg/feedback.hpp"
 #include "mobile_robotics_interfaces/msg/pose2_d_stamped.hpp"
 #include "mobile_robotics_interfaces/msg/transform2_d_stamped.hpp"
+
+#include <tf2_ros/transform_broadcaster.h>
+#include <geometry_msgs/msg/transform_stamped.hpp>
+#include <tf2/LinearMath/Quaternion.h>
+#include <tf2_geometry_msgs/tf2_geometry_msgs.hpp>
+
 using namespace std::chrono_literals;
 using std::placeholders::_1;
 
@@ -26,12 +32,20 @@ class Odometry : public rclcpp::Node
     {
       subscription_ = this->create_subscription<jackal_msgs::msg::Feedback>("feedback", 1000, std::bind(&Odometry::motor_callback, this, _1));
       odom_publisher_ = this->create_publisher<mobile_robotics_interfaces::msg::Transform2DStamped>("odom", 1000);
+      tf_broadcaster_ = std::make_shared<tf2_ros::TransformBroadcaster>(this);
+      
+      // 初始化状态变量
+      x_ = 0.0;
+      y_ = 0.0;
+      theta_ = 0.0;
+      first_msg_ = true;  // 添加这一行，确保正确初始化first_msg_标志
     }
 
   private:
     size_t count_;
     rclcpp::Subscription<jackal_msgs::msg::Feedback>::SharedPtr subscription_;
     rclcpp::Publisher<mobile_robotics_interfaces::msg::Transform2DStamped>::SharedPtr odom_publisher_;
+    std::shared_ptr<tf2_ros::TransformBroadcaster> tf_broadcaster_;
 
     // You may declare global variables here...
     double wheel_radius = 0.098;  // radius of the wheel, in meters
@@ -69,6 +83,31 @@ class Odometry : public rclcpp::Node
         prev_left_wheel_pos_ = left_wheel_pos;
         prev_right_wheel_pos_ = right_wheel_pos;
         first_msg_ = false;
+        
+        // 对于第一个消息，立即发布初始TF，确保坐标系对齐
+        auto odom_message = mobile_robotics_interfaces::msg::Transform2DStamped();
+        odom_message.header = jackal_feedback_msg.header;
+        odom_message.header.frame_id = "odom";
+        odom_message.x = x_;
+        odom_message.y = y_;
+        odom_message.theta = theta_;
+        
+        odom_publisher_->publish(odom_message);
+        
+        // 发布初始TF
+        geometry_msgs::msg::TransformStamped transform_stamped;
+        transform_stamped.header.stamp = odom_message.header.stamp;
+        transform_stamped.header.frame_id = "odom";
+        transform_stamped.child_frame_id = "base_link";
+        transform_stamped.transform.translation.x = 0.0;
+        transform_stamped.transform.translation.y = 0.0;
+        transform_stamped.transform.translation.z = 0.0;
+        
+        tf2::Quaternion tf2_quat;
+        tf2_quat.setRPY(0.0, 0.0, 0.0);
+        transform_stamped.transform.rotation = tf2::toMsg(tf2_quat);
+        
+        tf_broadcaster_->sendTransform(transform_stamped);
         return;
       }
       // Calculate the change in wheel position
@@ -109,6 +148,7 @@ class Odometry : public rclcpp::Node
       
       // Fill in the odometry message
       odom_message.header = jackal_feedback_msg.header;
+      odom_message.header.frame_id = "odom";
       odom_message.x = x_;
       odom_message.y = y_;
       odom_message.theta = theta_;
@@ -119,6 +159,21 @@ class Odometry : public rclcpp::Node
 
       odom_publisher_->publish(odom_message);
       // RCLCPP_INFO(this->get_logger(), "Odometry: dx=%f, dy=%f, dtheta=%f", delta_x, delta_y, delta_theta);
+
+      // Publish tf
+      geometry_msgs::msg::TransformStamped transform_stamped;
+      transform_stamped.header.stamp = odom_message.header.stamp;
+      transform_stamped.header.frame_id = "odom";
+      transform_stamped.child_frame_id = "base_link";
+      transform_stamped.transform.translation.x = odom_message.x;
+      transform_stamped.transform.translation.y = odom_message.y;
+      transform_stamped.transform.translation.z = 0.0;
+
+      tf2::Quaternion tf2_quat;
+      tf2_quat.setRPY(0.0, 0.0, odom_message.theta);
+      transform_stamped.transform.rotation = tf2::toMsg(tf2_quat);
+
+      tf_broadcaster_->sendTransform(transform_stamped);
     }
 };
 

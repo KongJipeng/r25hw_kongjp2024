@@ -59,7 +59,7 @@ def generate_launch_description():
     )
     
     # 启动 robot_state_publisher 节点
-    robot_state_publisher_cmd = Node(
+    odom_cmd = Node(
         package='mobile_robotics_odom',
         executable='odometry',
         output='screen',
@@ -72,7 +72,22 @@ def generate_launch_description():
         output='screen',
         parameters=[{'use_sim_time': use_sim_time}]
     )
-    
+
+    tf_pose_cmd = Node(
+        package='task2',
+        executable='tf_pose_node',
+        output='screen',
+        parameters=[{'use_sim_time': use_sim_time}]
+    )
+
+    pose3D_cmd = Node(
+        package='pose2d_to_3d',
+        executable='pose2D_to_3D_node',
+        output='screen',
+        parameters=[{'use_sim_time': use_sim_time}]
+    )
+
+
     # 启动 slam_gmapping 节点
     slam_gmapping_cmd = Node(
         package='slam_gmapping',
@@ -106,8 +121,10 @@ def generate_launch_description():
     ld.add_action(declare_figure8_sensor_bag_cmd)
     ld.add_action(declare_figure8_tracking_bag_cmd)
     ld.add_action(declare_rate_cmd)
-    ld.add_action(robot_state_publisher_cmd)
+    ld.add_action(odom_cmd)
     ld.add_action(pose_cmd)
+    ld.add_action(pose3D_cmd)
+    ld.add_action(tf_pose_cmd)
     ld.add_action(slam_gmapping_cmd)
     ld.add_action(pointcloud_to_laserscan_cmd)
     ld.add_action(rviz_cmd)

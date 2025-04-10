@@ -30,7 +30,6 @@ class Pose : public rclcpp::Node
       subscription_ = this->create_subscription<mobile_robotics_interfaces::msg::Transform2DStamped>("odom", 1000, std::bind(&Pose::pose_callback, this, _1));
       pose_publisher_ = this->create_publisher<mobile_robotics_interfaces::msg::Pose2DStamped>("pose", 1000);
       speed_publisher_ = this->create_publisher<mobile_robotics_interfaces::msg::SpeedStamped>("speed", 1000);
-      tf_broadcaster_ = std::make_shared<tf2_ros::TransformBroadcaster>(this);
     }
 
   private:
@@ -44,7 +43,6 @@ class Pose : public rclcpp::Node
     rclcpp::Subscription<mobile_robotics_interfaces::msg::Transform2DStamped>::SharedPtr subscription_;
     rclcpp::Publisher<mobile_robotics_interfaces::msg::Pose2DStamped>::SharedPtr pose_publisher_;
     rclcpp::Publisher<mobile_robotics_interfaces::msg::SpeedStamped>::SharedPtr speed_publisher_;
-    std::shared_ptr<tf2_ros::TransformBroadcaster> tf_broadcaster_;
 
     void pose_callback(const mobile_robotics_interfaces::msg::Transform2DStamped & odom_msg)
     {
@@ -54,20 +52,11 @@ class Pose : public rclcpp::Node
       // Get the current time
       rclcpp::Time current_time = this->get_clock()->now();
 
-      // Update the global position and orientation
-      global_x_ = odom_msg.x;
-      global_y_ = odom_msg.y;
-      global_theta_ = odom_msg.theta;
-      
-      // Normalize the angle
-      while (global_theta_ > M_PI) global_theta_ -= 2.0 * M_PI;
-      while (global_theta_ < -M_PI) global_theta_ += 2.0 * M_PI;
-      
       // Fill in the pose message
       pose_message.header = odom_msg.header;
-      pose_message.x = global_x_;
-      pose_message.y = global_y_;
-      pose_message.theta = global_theta_;
+      pose_message.x = odom_msg.x;
+      pose_message.y = odom_msg.y;
+      pose_message.theta = odom_msg.theta;
       
       pose_publisher_->publish(pose_message);
       // RCLCPP_INFO(this->get_logger(), "Odometry: x=%f, y=%f, theta=%f", pose_message.x, pose_message.y, pose_message.theta);
@@ -91,20 +80,6 @@ class Pose : public rclcpp::Node
       prev_x_ = global_x_;
       prev_y_ = global_y_;
 
-      // 发布 tf
-      geometry_msgs::msg::TransformStamped transform_stamped;
-      transform_stamped.header.stamp = current_time;
-      transform_stamped.header.frame_id = "odom";
-      transform_stamped.child_frame_id = "base_link";
-      transform_stamped.transform.translation.x = global_x_;
-      transform_stamped.transform.translation.y = global_y_;
-      transform_stamped.transform.translation.z = 0.0;
-
-      tf2::Quaternion tf2_quat;
-      tf2_quat.setRPY(0.0, 0.0, global_theta_);
-      transform_stamped.transform.rotation = tf2::toMsg(tf2_quat);
-
-      tf_broadcaster_->sendTransform(transform_stamped);
     }
 };
 

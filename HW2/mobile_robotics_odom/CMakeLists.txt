@@ -20,7 +20,7 @@ find_package(tf2_geometry_msgs REQUIRED)
 # find_package(<dependency> REQUIRED)
 
 add_executable(odometry src/odometry.cpp)
-ament_target_dependencies(odometry rclcpp jackal_msgs mobile_robotics_interfaces)
+ament_target_dependencies(odometry rclcpp jackal_msgs mobile_robotics_interfaces tf2 tf2_geometry_msgs)
 target_include_directories(odometry PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
   $<INSTALL_INTERFACE:include>)
@@ -50,3 +50,5 @@ if(BUILD_TESTING)
 endif()
 
 ament_package()
+install(DIRECTORY launch
+        DESTINATION share/${PROJECT_NAME})

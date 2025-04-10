@@ -9,9 +9,17 @@ endif()
 find_package(ament_cmake REQUIRED)
 
 find_package(rosbag2 REQUIRED)
+find_package(rclcpp REQUIRED)
+find_package(tf2_ros REQUIRED)
+find_package(geometry_msgs REQUIRED)
+find_package(tf2_geometry_msgs REQUIRED)
 # uncomment the following section in order to fill in
 # further dependencies manually.
 # find_package(<dependency> REQUIRED)
+
+add_executable(tf_pose_node src/tf_pose.cpp)
+ament_target_dependencies(tf_pose_node rclcpp tf2_ros geometry_msgs tf2_geometry_msgs)
+install(TARGETS tf_pose_node DESTINATION lib/${PROJECT_NAME})
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
